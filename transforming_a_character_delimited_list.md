@@ -1,6 +1,6 @@
-# Converting a Space/Tab separated list to other forms
+# Converting a Space (or any character) separated list to other forms
 
-## Space separated words to comma separated
+## To Comma separated list
 
 ### Input text
 
@@ -56,7 +56,9 @@ Command Format: `:[range]s/{pattern}/{string}/[flags] [count]`
 `,<space>` string, character which will be replaced with.
 `g` flag, global flag to replace all occurrence in the line.
 
-> Tip: Substitute or Search command uses search highlighting to show the matching results. To keep showing the search highlights even after the search use `:set hlsearch` command. To toggle search highlighting use `:set hlsearch!`, to disable it completely use `:set nohlsearch`, to clear the last search highlights without disabling search highlighting use `:noh`
+> Tip 1: Learning a little bit of regex (Regular Expressions) can help a lot with substitution command.
+
+> Tip 2 : Substitute or Search command uses search highlighting to show the matching results. To keep showing the search highlights even after the search use `:set hlsearch` command. To toggle search highlighting use `:set hlsearch!`, to disable it completely use `:set nohlsearch`, to clear the last search highlights without disabling search highlighting use `:noh`
 
 ## Solution 3 (Using a Macro)
 
@@ -86,49 +88,62 @@ Command Format: `:[range]s/{pattern}/{string}/[flags] [count]`
 
 > Tip: If you frequently do the same text transformation, you can define a function instead of using the macro.
 
-## Some other formats
+## To other different formats
 
 ---
 
-### Converting to quoted & comma separated
+1. Converting to quoted & comma separated
 
-> 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'
+    > 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'
 
-Substitution: `I'<esc>:s/\s+/', '/g<enter>A'<esc>`
-Macro: `I'<esc>qqf<space>cw', '<esc>q100@qA'<esc>`
+    Substitution: `I'<esc>:s/\s+/', '/g<enter>A'<esc>`
 
-### Splitting words into new line
+    Macro: `I'<esc>qqf<space>cw', '<esc>q100@qA'<esc>`
 
-``` plain
-one
-two
-three
-four
-five
-six
-seven
-eight
-nine
-```
+    > This is useful to use in an array or in SQL query.
 
-`0qsf<space>r<enter>q100@s`
+2. Splitting into words separated by new line
+    
+    ### Output
 
-### Combining multiple lines into a single line
+    ``` plain
+    one
+    two
+    three
+    four
+    five
+    six
+    seven
+    eight
+    nine
+    ```
 
-``` plain
-The
-quick
-brown
-fox
-jumps
-over
-the
-lazy
-dog.
-```
+    `0qsf<space>r<enter>q100@s`
 
-`J` This key allows to combine the just below line into the current line, you can use `.` after the `J` to continue combining the lines.
+3. Joining newline delimited list of words into a single line
 
-`0qjJq7@j` Merge below 8 lines into a single with macro.
+    ### Input
 
-> Tip: you can view the value stored in your registers using the `:reg` command.
+    ``` plain
+    The
+    quick
+    brown
+    fox
+    jumps
+    over
+    the
+    lazy
+    dog.
+    ```
+
+    ### Output
+
+    >  The quick brown fox jumps over the lazy dog.
+
+    `J` This key allows to combine the just below line into the current line, you can use `.` after the `J` to continue combining the lines.
+
+    `V/dog:s/\n\s+/ /g` Substitution
+
+    `0qjJq7@j` Merge below 8 lines into a single with macro.
+
+    > Tip: you can view the value stored in your registers using the `:reg` command.
